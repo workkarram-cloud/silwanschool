@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مولد شهادات مدرسة ذكور سلوان</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Reem+Kufi:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .cert-font {
+            font-family: 'Amiri', serif;
+        }
+        .title-font {
+            font-family: 'Reem Kufi', sans-serif;
+        }
+        /* تصميم الشهادة */
+        #certificate-area {
+            width: 800px;
+            height: 580px;
+            background: white;
+            position: relative;
+            padding: 30px 40px; /* تقليل الحشو العلوي والسفلي */
+            box-sizing: border-box;
+            border: 15px solid #d4af37;
+            outline: 5px solid #1e3a8a;
+            outline-offset: -20px;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 80%),
+                url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .corner-decoration {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 4px solid #d4af37;
+        }
+        .top-right { top: 10px; right: 10px; border-bottom: none; border-left: none; }
+        .top-left { top: 10px; left: 10px; border-bottom: none; border-right: none; }
+        .bottom-right { bottom: 10px; right: 10px; border-top: none; border-left: none; }
+        .bottom-left { bottom: 10px; left: 10px; border-top: none; border-right: none; }
+
+        @media print {
+            .no-print { display: none; }
+            body { background: white; margin: 0; padding: 0; }
+            #certificate-area { box-shadow: none; margin: 0; transform: scale(1); }
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #374151;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #1e3a8a;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+        .school-seal {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            mix-blend-mode: multiply;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- قسم إدخال البيانات -->
+        <div class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg no-print">
+            <h2 class="text-2xl font-bold mb-6 text-blue-900 flex items-center gap-2">
+                <span>📝</span> لوحة التحكم
+            </h2>
+            
+            <div class="input-group">
+                <label>إدارة المدرسة (ثابت)</label>
+                <input type="text" id="in-school" value="مدرسة ذكور سلوان الابتدائية" disabled class="bg-gray-100 cursor-not-allowed">
+                
+                <label>اسم المعلم/ة</label>
+                <input type="text" id="in-teacher" placeholder="أدخل اسمك هنا" oninput="updateCert()">
+                
+                <label>اسم الطالب المتميز</label>
+                <input type="text" id="in-student" placeholder="الاسم الرباعي للطالب" oninput="updateCert()">
+                
+                <label>الصف</label>
+                <input type="text" id="in-grade" placeholder="مثلاً: السادس أ" oninput="updateCert()">
+            </div>
+
+            <div class="mt-6 flex flex-col gap-3">
+                <button onclick="downloadImage()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
+                    <span>💾</span> حفظ الشهادة كصورة
+                </button>
+                
+            </div>
+            
+            <p class="text-xs text-gray-500 mt-4 text-center">التصميم مخصص لمدرسة ذكور سلوان الابتدائية</p>
+        </div>
+
+        <!-- قسم معاينة الشهادة -->
+        <div class="lg:col-span-2 overflow-x-auto pb-8">
+            <div id="certificate-area" class="mx-auto">
+                <!-- زخارف الزوايا -->
+                <div class="corner-decoration top-right"></div>
+                <div class="corner-decoration top-left"></div>
+                <div class="corner-decoration bottom-right"></div>
+                <div class="corner-decoration bottom-left"></div>
+
+                <div class="text-center relative z-10">
+                    <h1 class="title-font text-4xl text-yellow-600 mb-1">🏆 شهادة  تميّز وتقدير 🏆</h1>
+                    
+                    <div class="cert-font text-lg text-gray-800 mt-2 leading-relaxed">
+                        <p class="mb-3">
+                            تفتخر <span class="font-bold text-blue-900">مدرسة ذكور سلوان الابتدائية</span>
+                            والمعلم/ة: <span id="out-teacher-top" class="font-bold text-blue-900 border-b border-dotted border-gray-400">.......................</span>
+                        </p>
+                        
+                        <p class="text-xl mb-1">بتكريم الطالب المتميّز: </p>
+                        <p class="text-4xl font-bold text-blue-800 my-2 title-font" id="out-student">..........................................</p>
+                        
+                        <p class="mb-3 text-lg">
+                            من الصف: <span id="out-grade" class="font-bold text-blue-900 border-b border-dotted border-gray-400">.......................</span>
+                        </p>
+
+                        <div class="text-[13px] px-14 leading-relaxed text-gray-700">
+                            وذلك تقديرًا لالتزامه اللافت بالتعلم عن بُعد، وحضوره الدائم، ومشاركاته الفعّالة التي كان لها أثر واضح في إنجاح الحصص التعليمية وإثرائها. لقد كان نموذجًا يُحتذى به في المسؤولية والانضباط، ومثالًا للطالب الطموح الذي يسعى دائمًا للتميّز والتفوّق.
+                        </div>
+
+                        <div class="text-[13px] px-14 mt-2 font-bold text-gray-800 italic">
+                            كما نتوجّه بجزيل الشكر والتقدير إلى ذويه الكرام، على دعمهم المستمر ومتابعتهم الحثيثة، والتي كان لها الدور الكبير في هذا الإنجاز.
+                        </div>
+
+                        <p class="mt-4 text-base text-yellow-700 font-bold">
+                            🌟 معًا نحو القمّة… والتميّز ليس صدفة بل اختيار 🌟
+                        </p>
+
+                        <!-- القسم المطلوب رفعه للأعلى -->
+                        <div class="flex justify-between items-center mt-6 px-12 text-right text-sm border-t border-gray-100 pt-4">
+                            <div>
+                                <p class="text-gray-600 font-bold mb-1 underline">مع فائق الاحترام والتقدير،</p>
+                                <p class="mt-1 font-bold text-blue-900">المعلم/ة: <span id="out-teacher-bottom">..............</span></p>
+                                <p class="mt-1 font-bold text-blue-900">إدارة المدرسة: مدرسة ذكور سلوان</p>
+                            </div>
+                            <div class="text-center">
+                                <img src="https://lh3.googleusercontent.com/d/1Trv3aVvG-9OI1pIBM-kW0pSNBga3RhCC" alt="ختم المدرسة" class="school-seal mx-auto" onerror="this.src='https://via.placeholder.com/100?text=الختم'">
+                                <p class="text-[10px] text-gray-500 font-bold mt-1">الختم الرسمي للمدرسة</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function updateCert() {
+            const teacher = document.getElementById('in-teacher').value || ".......................";
+            const student = document.getElementById('in-student').value || "..........................................";
+            const grade = document.getElementById('in-grade').value || ".......................";
+
+            document.getElementById('out-teacher-top').innerText = teacher;
+            document.getElementById('out-teacher-bottom').innerText = teacher;
+            document.getElementById('out-student').innerText = student;
+            document.getElementById('out-grade').innerText = grade;
+        }
+
+        async function downloadImage() {
+            const certElement = document.getElementById('certificate-area');
+            const originalTransform = certElement.style.transform;
+            certElement.style.transform = 'none';
+
+            try {
+                const canvas = await html2canvas(certElement, {
+                    scale: 3, 
+                    useCORS: true,
+                    allowTaint: true,
+                    logging: false,
+                    backgroundColor: "#ffffff"
+                });
+                
+                const image = canvas.toDataURL("image/png");
+                const link = document.createElement('a');
+                const studentName = document.getElementById('in-student').value || "شهادة_تميز";
+                link.download = `شهادة_سلوان_${studentName}.png`;
+                link.href = image;
+                link.click();
+            } catch (error) {
+                console.error("خطأ في التحميل:", error);
+            } finally {
+                certElement.style.transform = originalTransform;
+            }
+        }
+    </script>
+</body>
+</html>
